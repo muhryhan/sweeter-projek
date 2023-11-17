@@ -1,3 +1,6 @@
+import os
+from os.path import join, dirname
+from dotenv import load_dotenv
 from pymongo import MongoClient
 import jwt
 from jwt.exceptions import ExpiredSignatureError
@@ -14,16 +17,20 @@ from flask import (
 )
 from werkzeug.utils import secure_filename
 
+dotenv_path = join(dirname(__file__), '.env')
+load_dotenv(dotenv_path)
+
+MONGODB_URI = os.environ.get("MONGODB_URI")
+DB_NAME =  os.environ.get("DB_NAME")
+client = MongoClient(MONGODB_URI)
+db = client[DB_NAME]
+
 app = Flask(__name__)
 
 app.config['TEAMPLATES_AUTO_RELOAD'] = True
 app.config['UPLOAD_FOLDER'] = './static/profile_pics'
 
 SECRET_KEY = 'SPARTA'
-
-MONGODB_CONNECTION_STRING = 'mongodb+srv://mryhan:mryhan@cluster0.cq5ursx.mongodb.net/?retryWrites=true&w=majority&appName=AtlasApp'
-client = MongoClient(MONGODB_CONNECTION_STRING)
-db = client.dbsparta_plus_week4
 
 TOKEN_KEY = 'mytoken'
 
